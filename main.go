@@ -21,5 +21,6 @@ func main(){
 	r.GET("/users/:id", s.GetUser)
 	r.POST("/users", s.CreateUser)
 	r.DELETE("/users/:id", s.DeleteUser)
+	r.POST("/login", s.Login)
 	r.Run()
 }

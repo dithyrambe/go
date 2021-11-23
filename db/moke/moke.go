@@ -17,6 +17,8 @@ import (
 	"lbc/model"
 )
 
+var _ db.Store = &Moke{}
+
 type Moke struct {
 	listUser map[string]*model.User
 }
@@ -34,11 +36,15 @@ func (m *Moke) SponeUser() {
 			ID:        "a0d09b91-0dcb-4aae-a0de-3a797891666c",
 			FirstName: "Bob",
 			LastName:  "Picke",
+			Email: "bob.picke@domain.fr",
+			Password: "47625ed74cab8fbc0a8348f3df1feb07f87601e34d62bd12eb0d51616566fab5", // 123password
 		},
 		"05eca63d-c6e5-4a38-ba4f-65ff100c17bc": &model.User{
 			ID:        "05eca63d-c6e5-4a38-ba4f-65ff100c17bc",
 			FirstName: "Dennis",
 			LastName:  "Richie",
+			Email: "dennis.richie@domain.fr",
+			Password: "47625ed74cab8fbc0a8340f3df1feb07f87601e34d62bd12eb0d51616566fab5", // ???
 		},
 	}
 }
@@ -50,6 +56,15 @@ func (m *Moke) GetUserByID(id string) (*model.User, error) {
 		return nil, db.NewNotFound("db/moke")
 	}
 	return u, nil
+}
+
+func (m *Moke) GetUserByEmail(email string) (*model.User, error) {
+	for k := range m.listUser {
+		if m.listUser[k].Email == email {
+			return m.listUser[k], nil
+		}
+	}
+	return nil, db.NewNotFound("db/moke")
 }
 
 func (m *Moke) DeleteUser(id string) error {

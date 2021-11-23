@@ -10,15 +10,14 @@ package db
 
 import "lbc/model"
 
-
 type Store interface {
 	StoreUser
 }
 
 type StoreUser interface {
-	GetUsers()([]*model.User, error)
-	GetUserByID(id string)(*model.User,error)
-	DeleteUser(id string)error
-	AddUser(u *model.User)error
+	GetUsers() ([]*model.User, error)
+	GetUserByID(id string) (*model.User, error)
+	GetUserByEmail(email string) (*model.User, error)
+	DeleteUser(id string) error
+	AddUser(u *model.User) error
 }
-

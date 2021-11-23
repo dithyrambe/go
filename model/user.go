@@ -9,6 +9,7 @@
 package model
 
 import (
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 )
@@ -17,10 +18,28 @@ type User struct{
 	ID string `json:"uuid"`
 	FirstName string `json:"first_name"`
 	LastName string `json:"last_name"`
+	Email string `json:"email"`
 	Password Pass `json:"password,omitempty"`
 }
 
+type Login struct{
+	Email string `json:"email"`
+	Password Pass `json:"password,omitempty"`
+}
+
+
 type Pass string
+
+func (p *Pass) UnmarshalJSON(b []byte) error {
+	var s string
+	if err := json.Unmarshal(b, &s); err != nil {
+		return err
+	}
+	h := sha256.New()
+	h.Write([]byte(s))
+	*p = Pass(fmt.Sprintf("%x", h.Sum(nil)))
+	return nil
+}
 
 func (p Pass) MarshalJSON() ([]byte, error) {
 	return json.Marshal(nil)
