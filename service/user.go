@@ -47,3 +47,11 @@ func (s *Service)GetUser(ctx *gin.Context) {
 	}
 	ctx.JSON(200, u)
 }
+
+func (s *Service)GetUsers(ctx *gin.Context) {
+	users, err := s.db.GetUsers()
+	if err != nil {
+		_ = ctx.AbortWithError(http.StatusInternalServerError, err)
+	}
+	ctx.JSON(http.StatusOK, users)
+}

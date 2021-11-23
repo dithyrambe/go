@@ -17,8 +17,9 @@ func main(){
 	db := moke.New()
 	db.SponeUser()
 	s := service.New(db)
-	r.POST("/users", s.CreateUser)
+	r.GET("/users", s.GetUsers)
 	r.GET("/users/:id", s.GetUser)
+	r.POST("/users", s.CreateUser)
 	r.DELETE("/users/:id", s.DeleteUser)
 	r.Run()
 }

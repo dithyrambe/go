@@ -17,54 +17,60 @@ import (
 	"lbc/model"
 )
 
-type Moke struct{
+type Moke struct {
 	listUser map[string]*model.User
 }
 
-func New()*Moke{
+func New() *Moke {
 	return &Moke{
 		listUser: make(map[string]*model.User),
 	}
 }
 
-func (m *Moke)SponeUser(){
-
+func (m *Moke) SponeUser() {
 
 	m.listUser = map[string]*model.User{
-		"a0d09b91-0dcb-4aae-a0de-3a797891666c" : &model.User{
-			ID:"a0d09b91-0dcb-4aae-a0de-3a797891666c",
+		"a0d09b91-0dcb-4aae-a0de-3a797891666c": &model.User{
+			ID:        "a0d09b91-0dcb-4aae-a0de-3a797891666c",
 			FirstName: "Bob",
-			LastName: "Picke",
+			LastName:  "Picke",
 		},
-		"05eca63d-c6e5-4a38-ba4f-65ff100c17bc" : &model.User{
-			ID:"05eca63d-c6e5-4a38-ba4f-65ff100c17bc",
+		"05eca63d-c6e5-4a38-ba4f-65ff100c17bc": &model.User{
+			ID:        "05eca63d-c6e5-4a38-ba4f-65ff100c17bc",
 			FirstName: "Dennis",
-			LastName: "Richie",
+			LastName:  "Richie",
 		},
 	}
 }
 
-
-func (m *Moke)GetUserByID(id string)(*model.User,error){
+func (m *Moke) GetUserByID(id string) (*model.User, error) {
 	u := m.listUser[id]
-	fmt.Printf("user value:%v type:%T\n",u,u)
-	if u == nil{
-		return nil,db.NewNotFound("db/moke")
+	fmt.Printf("user value:%v type:%T\n", u, u)
+	if u == nil {
+		return nil, db.NewNotFound("db/moke")
 	}
-	return u,nil
+	return u, nil
 }
 
-func(m *Moke) DeleteUser(id string)error{
+func (m *Moke) DeleteUser(id string) error {
 	_, err := m.GetUserByID(id)
 	if err != nil {
-		return db.NewNotFound("db/moke",err)
+		return db.NewNotFound("db/moke", err)
 	}
 	delete(m.listUser, id)
 	return nil
 }
 
-func (m *Moke)AddUser(u *model.User)error{
+func (m *Moke) AddUser(u *model.User) error {
 	u.ID = uuid.NewString()
-    m.listUser[u.ID] = u
+	m.listUser[u.ID] = u
 	return nil
+}
+
+func (m *Moke) GetUsers() ([]*model.User, error) {
+	users := make([]*model.User, 0, len(m.listUser))
+	for k := range m.listUser {
+		users = append(users, m.listUser[k])
+	}
+	return users, nil
 }

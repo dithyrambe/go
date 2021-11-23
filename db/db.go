@@ -16,6 +16,7 @@ type Store interface {
 }
 
 type StoreUser interface {
+	GetUsers()([]*model.User, error)
 	GetUserByID(id string)(*model.User,error)
 	DeleteUser(id string)error
 	AddUser(u *model.User)error
