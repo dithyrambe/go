@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"encoding/json"
+	"os"
 	"time"
 
 	jwe "github.com/square/go-jose"
@@ -17,6 +18,33 @@ var (
 func init() {
 	var err error
 	privateKey, err = rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		panic(err)
+	}
+	strPrivateKey := ExportRsaPrivateKeyAsPemStr(privateKey)
+	fprivate, err := os.Create("key.private")
+	if err != nil {
+		panic(err)
+	}
+	defer fprivate.Close()
+
+	_, err = fprivate.WriteString(strPrivateKey)
+	if err != nil {
+		panic(err)
+	}
+
+	strPublicKey,err := ExportRsaPublicKeyAsPemStr(&privateKey.PublicKey)
+	if err != nil {
+		panic(err)
+	}
+
+	fPublic, err := os.Create("key.public")
+	if err != nil {
+		panic(err)
+	}
+	defer fPublic.Close()
+
+	_, err = fPublic.WriteString(strPublicKey)
 	if err != nil {
 		panic(err)
 	}
