@@ -17,12 +17,13 @@ type User struct{
 	ID string `json:"uuid"`
 	FirstName string `json:"first_name"`
 	LastName string `json:"last_name"`
-	Password string `json:"password,omitempty"`
+	Password Pass `json:"password,omitempty"`
 }
 
-func (u User) MarshalJSON() ([]byte, error) {
-	u.Password = ""
-	return json.Marshal(u)
+type Pass string
+
+func (p Pass) MarshalJSON() ([]byte, error) {
+	return json.Marshal(nil)
 }
 
 

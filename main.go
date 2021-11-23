@@ -14,7 +14,9 @@ func init(){
 
 func main(){
 	r := gin.Default()
-	s := service.New(moke.New())
+	db := moke.New()
+	db.SponeUser()
+	s := service.New(db)
 	r.POST("/users", s.CreateUser)
 	r.GET("/users/:id", s.GetUser)
 	r.DELETE("/users/:id", s.DeleteUser)
