@@ -20,4 +20,5 @@ type StoreUser interface {
 	GetUserByEmail(email string) (*model.User, error)
 	DeleteUser(id string) error
 	AddUser(u *model.User) error
+	SponeUser()
 }

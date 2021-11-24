@@ -12,16 +12,18 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"gorm.io/gorm"
 	"lbc/util"
 )
 
 type User struct {
-	ID          string `json:"uuid"`
+	ID          string `json:"uuid" gorm:"primaryKey"`
 	FirstName   string `json:"first_name"`
 	LastName    string `json:"last_name"`
 	Email       string `json:"email"`
 	Password    Pass   `json:"password,omitempty"`
 	AccessLevel int    `json:"access_level"`
+	DeletedAt gorm.DeletedAt `json:"deleted_at"`
 }
 
 func (u *User) Valid() error {

@@ -3,7 +3,8 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"lbc/db/moke"
+
+	"lbc/db/sqlite"
 	"lbc/service"
 	"lbc/util"
 )
@@ -14,7 +15,7 @@ func init(){
 
 func main(){
 	r := gin.Default()
-	db := moke.New()
+	db := sqlite.New("my.db")
 	db.SponeUser()
 	s := service.New(db)
 	r.GET("/users", util.MiddlewareVerifyJWE(1) ,s.GetUsers)
@@ -24,3 +25,4 @@ func main(){
 	r.POST("/login", s.Login)
 	r.Run()
 }
+
