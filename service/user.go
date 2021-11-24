@@ -74,10 +74,12 @@ func (s *Service) Login(ctx *gin.Context) {
 		_ = ctx.AbortWithError(http.StatusNotFound, err)
 		return
 	}
+
 	if user.Password != payload.Password {
-		_ = ctx.AbortWithError(http.StatusUnauthorized, err)
+		ctx.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
+
 	claim := util.NewClaim(user.ID,user.FirstName,user.AccessLevel)
 	jwe,err := util.CreateJWE(claim)
 	if err != nil {

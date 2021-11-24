@@ -45,7 +45,7 @@ func (m *Moke) SponeUser() {
 			FirstName: "René",
 			LastName:  "Leblanc",
 			Email: "r@google.com",
-			Password: "83671681bd1a452d3e5c88bb03595a336582928f41664755e8ac16ece230bbd4", // monmdp
+			Password: "51d59a88b0e1f1ad672dad1fb56626c2169a737ac5d6cd544355c53bc495e769", // monmdp
 			AccessLevel: 1,
 		},
 		"05eca63d-c6e5-4a38-ba4f-65ff100c17bc": &model.User{

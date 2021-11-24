@@ -34,7 +34,7 @@ func (s *SQlite) GetUsers() ([]*model.User, error) {
 
 func (s *SQlite) GetUserByID(id string) (*model.User, error) {
 	u := new(model.User)
-	return u, s.Conn.Where("uuid = ?", id).First(u).Error
+	return u, s.Conn.Where("id = ?", id).First(u).Error
 }
 
 func (s *SQlite) GetUserByEmail(email string) (*model.User, error) {
@@ -47,7 +47,7 @@ func (s *SQlite) GetUserByEmail(email string) (*model.User, error) {
 }
 
 func (s *SQlite) DeleteUser(id string) error {
-	return s.Conn.Delete("uuid = ?", id).Error
+	return s.Conn.Delete("id = ?", id).Error
 }
 
 func (s *SQlite) AddUser(u *model.User) error {
@@ -71,7 +71,7 @@ func (s *SQlite) SponeUser() {
 			FirstName:   "René",
 			LastName:    "Leblanc",
 			Email:       "r@google.com",
-			Password:    "83671681bd1a452d3e5c88bb03595a336582928f41664755e8ac16ece230bbd4", // monmdp
+			Password:    "f4f263e439cf40925e6a412387a9472a6773c2580212a4fb50d224d3a817de17", // mdp
 			AccessLevel: 1,
 		},
 		{
