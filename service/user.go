@@ -11,6 +11,7 @@ package service
 import (
 	"github.com/gin-gonic/gin"
 	"lbc/model"
+	"lbc/util"
 	"log"
 	"net/http"
 )
@@ -19,6 +20,12 @@ func (s *Service) CreateUser(ctx *gin.Context) {
 	var payload model.User
 	err := ctx.BindJSON(&payload)
 	if err != nil {
+		_ = ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+	err = payload.Valid()
+	if err != nil {
+		log.Printf("email not valid %v",err)
 		_ = ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -71,9 +78,15 @@ func (s *Service) Login(ctx *gin.Context) {
 		_ = ctx.AbortWithError(http.StatusUnauthorized, err)
 		return
 	}
+	claim := util.NewClaim(user.ID,user.FirstName,user.AccessLevel)
+	jwe,err := util.CreateJWE(claim)
+	if err != nil {
+		_ = ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"jwt": "lkasjdlfjlaksdjfldsjfs",
+		"jwt": jwe,
 	})
 
 }

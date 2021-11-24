@@ -38,6 +38,15 @@ func (m *Moke) SponeUser() {
 			LastName:  "Picke",
 			Email: "bob.picke@domain.fr",
 			Password: "47625ed74cab8fbc0a8348f3df1feb07f87601e34d62bd12eb0d51616566fab5", // 123password
+			AccessLevel: 0,
+		},
+		"2c3759ce-1c08-47f4-9dcc-bc5fb61f4d66": &model.User{
+			ID:        "2c3759ce-1c08-47f4-9dcc-bc5fb61f4d66",
+			FirstName: "René",
+			LastName:  "Leblanc",
+			Email: "r@google.com",
+			Password: "83671681bd1a452d3e5c88bb03595a336582928f41664755e8ac16ece230bbd4", // monmdp
+			AccessLevel: 1,
 		},
 		"05eca63d-c6e5-4a38-ba4f-65ff100c17bc": &model.User{
 			ID:        "05eca63d-c6e5-4a38-ba4f-65ff100c17bc",
@@ -45,6 +54,7 @@ func (m *Moke) SponeUser() {
 			LastName:  "Richie",
 			Email: "dennis.richie@domain.fr",
 			Password: "47625ed74cab8fbc0a8340f3df1feb07f87601e34d62bd12eb0d51616566fab5", // ???
+			AccessLevel: 1,
 		},
 	}
 }

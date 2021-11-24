@@ -12,21 +12,26 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"lbc/util"
 )
 
-type User struct{
-	ID string `json:"uuid"`
-	FirstName string `json:"first_name"`
-	LastName string `json:"last_name"`
-	Email string `json:"email"`
-	Password Pass `json:"password,omitempty"`
+type User struct {
+	ID          string `json:"uuid"`
+	FirstName   string `json:"first_name"`
+	LastName    string `json:"last_name"`
+	Email       string `json:"email"`
+	Password    Pass   `json:"password,omitempty"`
+	AccessLevel int    `json:"access_level"`
 }
 
-type Login struct{
-	Email string `json:"email"`
-	Password Pass `json:"password,omitempty"`
+func (u *User) Valid() error {
+	return util.ValidEmail(u.Email)
 }
 
+type Login struct {
+	Email    string `json:"email"`
+	Password Pass   `json:"password,omitempty"`
+}
 
 type Pass string
 
@@ -45,7 +50,6 @@ func (p Pass) MarshalJSON() ([]byte, error) {
 	return json.Marshal(nil)
 }
 
-
-func (u *User)Hello()string{
-	return fmt.Sprintf("%v",u.FirstName)
+func (u *User) Hello() string {
+	return fmt.Sprintf("%v", u.FirstName)
 }

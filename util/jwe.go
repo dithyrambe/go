@@ -4,7 +4,11 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"encoding/json"
+	"github.com/gin-gonic/gin"
+	"log"
+	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	jwe "github.com/square/go-jose"
@@ -33,7 +37,7 @@ func init() {
 		panic(err)
 	}
 
-	strPublicKey,err := ExportRsaPublicKeyAsPemStr(&privateKey.PublicKey)
+	strPublicKey, err := ExportRsaPublicKeyAsPemStr(&privateKey.PublicKey)
 	if err != nil {
 		panic(err)
 	}
@@ -104,4 +108,37 @@ func GetJWE(jweValue string) (*CustomClaims, error) {
 	}
 
 	return &c, nil
+}
+
+func MiddlewareVerifyJWE(minAccessLevel int) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		auth := ctx.GetHeader("Authorization")
+		if len(auth) == 0 {
+			log.Println("a")
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+
+		if !strings.Contains(auth, "Bearer ") {
+			log.Println("b")
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+
+		jwt := strings.Split(auth, " ")[1]
+		log.Println("success get jwe value",jwt)
+		payload, err := GetJWE(jwt)
+		log.Printf("success get payload value %#v\n",payload)
+		if err != nil {
+			log.Println("c")
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+
+		if payload.AccessLevel < minAccessLevel {
+			log.Println("d")
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+	}
 }
