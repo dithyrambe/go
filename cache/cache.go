@@ -6,23 +6,13 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package service
+package cache
 
-import (
-	"lbc/cache"
-	"lbc/db"
-	rick_morty "lbc/sdk/rick-morty"
-)
-
-type Service struct{
-	db db.Store
-	cache cache.Cache
-	sdkRick *rick_morty.Client
+type Cache interface {
+	StorePayload
 }
 
-func New(db db.Store,cache cache.Cache)*Service{
-	return &Service{
-		db:db,
-		cache: cache,
-	}
+type StorePayload interface {
+	Set(hash string, payload []byte)error
+	Get(hash string)([]byte,error)
 }

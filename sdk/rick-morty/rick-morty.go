@@ -9,29 +9,39 @@ import (
 
 var baseURL = "https://rickandmortyapi.com/api"
 
-func GetCaracters() (*CaracterPayloadResponse, error) {
+type Client struct {
+	cli *http.Client
+}
+
+func New() *Client {
+	return &Client{
+		cli: http.DefaultClient,
+	}
+}
+
+func (cli *Client)GetCaracters() (*CaracterPayloadResponse, error) {
 	var caracters CaracterPayloadResponse
-	err := request(http.MethodGet, "/character/?page=19", nil, &caracters)
+	err := cli.request(http.MethodGet, "/character/?page=19", nil, &caracters)
 	if err != nil {
 		return nil, err
 	}
 	return &caracters, nil
 }
 
-func request(verb string, uri string, body interface{}, bindTo interface{}) error {
+func (cli *Client)request(verb string, uri string, body interface{}, bindTo interface{}) error {
 
 	if body != nil {
 		buff := new(bytes.Buffer)
 		err := json.NewEncoder(buff).Encode(body)
-		if err !=nil{
-			return nil
+		if err != nil {
+			return err
 		}
 
 		req, err := http.NewRequest(verb, baseURL+uri, buff)
 		if err != nil {
 			return err
 		}
-		return execRequest(req, bindTo)
+		return cli.execRequest(req, bindTo)
 	}
 
 	req, err := http.NewRequest(verb, baseURL+uri, nil)
@@ -39,12 +49,11 @@ func request(verb string, uri string, body interface{}, bindTo interface{}) erro
 		return err
 	}
 
-	return execRequest(req, bindTo)
+	return cli.execRequest(req, bindTo)
 }
 
-func execRequest(req *http.Request, bindTo interface{}) error {
-	client := http.DefaultClient
-	resp, err := client.Do(req)
+func (cli *Client)execRequest(req *http.Request, bindTo interface{}) error {
+	resp, err := cli.cli.Do(req)
 	if err != nil {
 		return err
 	}
