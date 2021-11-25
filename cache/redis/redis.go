@@ -2,8 +2,8 @@ package redis
 
 import (
 	"fmt"
-
 	"github.com/go-redis/redis"
+	"time"
 
 	"lbc/cache"
 )
@@ -22,7 +22,7 @@ func New(port string) cache.Cache {
 }
 
 func (r *RedisConn) Set(hash string, payload []byte) error {
-	err := r.Conn.Set(hash, string(payload), 0).Err()
+	err := r.Conn.Set(hash, string(payload), time.Second*3).Err()
 	if err != nil {
 		fmt.Printf("%v", err)
 		return err

@@ -21,7 +21,12 @@ func (s *Service) GetCharacters(ctx *gin.Context) {
 
 	if data != nil {
 		log.Println("get from cash")
-		ctx.JSON(http.StatusOK, data)
+		_, err = ctx.Writer.Write(data)
+		if err != nil {
+			ctx.AbortWithStatus(http.StatusInternalServerError)
+			return
+		}
+		ctx.Status(http.StatusOK)
 		return
 	}
 
